@@ -7,6 +7,7 @@ let newsID = 0;
 
 $("#searchBtn").on("click", function() {
   let topic = $("#searchText").val();
+  let newsID = 0;
   $(".column").attr("style", "display:block");
   $.ajax({
     url: api_url + topic + "&language=en" + "&apikey=" + newsAPIkey
@@ -26,14 +27,16 @@ function updateNews(result) {
 
 $(".next").on("click", function() {
   if (newsID < 19) {
+    console.log(newsID);
     newsID++;
     updateNews(newsArray);
   }
 });
 
-$(".previous").on("click", function() {
-  if (news > 1) {
+$(".prev").on("click", function() {
+  if (newsID > 1) {
     newsID--;
+    console.log(newsID);
     updateNews(newsArray);
   }
 });

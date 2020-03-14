@@ -7,7 +7,6 @@ $("#searchBtn").on("click", function () {
   newsAPIstub($("#searchText").val());
   wikiAPIstub($("#searchText").val());
   flickrAPIstub($("#searchText").val());
-
 });
 
 function wikiAPIstub(topic) {

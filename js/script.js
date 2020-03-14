@@ -24,14 +24,14 @@ function updateNews(result) {
   $(".newsURL").attr("href", result.articles[newsID].url);
 }
 
-$(".previous").on("click", function() {
-  if (newsID < 20) {
+$(".next").on("click", function() {
+  if (newsID < 19) {
     newsID++;
     updateNews(newsArray);
   }
 });
 
-$(".next").on("click", function() {
+$(".previous").on("click", function() {
   if (news > 1) {
     newsID--;
     updateNews(newsArray);

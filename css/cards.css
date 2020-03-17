@@ -1,6 +1,6 @@
 body {
   background: #041221;
-  height: 200vh;
+  min-height: 200vh;
 }
 /* Card start*/
 .card {

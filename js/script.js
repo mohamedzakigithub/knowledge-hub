@@ -11,79 +11,54 @@ $("#searchBtn").on("click", function () {
 
 function wikiAPIstub(topic) {
   console.log("wikiAPI called with..." + " " + topic);
-    //var queryURL = "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&rvsection=0&titles=pizza&imlimit=20&origin=*&format=json&formatversion=2";
-    //var queryURL = "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="+topic+"&origin=*&format=json"
-    var queryURL= "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles="+topic;
-    // Performing an AJAX request with the queryURL
-    $.ajax({
+  //var queryURL = "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&rvsection=0&titles=pizza&imlimit=20&origin=*&format=json&formatversion=2";
+  //var queryURL = "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="+topic+"&origin=*&format=json"
+  var queryURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=" + topic;
+  // Performing an AJAX request with the queryURL
+  $.ajax({
       url: queryURL,
       method: "GET"
     })
-      // After data comes back from the request
-      .then(function (response) {
-        console.log(queryURL);
-  
-       // console.log(response);
-        // storing the data from the AJAX request in the results variable
-        //var results = response.data;
-        var obj = response.query.pages;
-        var ob = Object.keys(obj)[0];
-        console.log(obj[ob]["extract"]);
-        var wikiResponse = response.query.pages;
-        $("#wiki-content").text(obj[ob]["extract"])
-      });
+    // After data comes back from the request
+    .then(function (response) {
+      console.log(queryURL);
+
+      // console.log(response);
+      // storing the data from the AJAX request in the results variable
+      //var results = response.data;
+      var obj = response.query.pages;
+      var ob = Object.keys(obj)[0];
+      console.log(obj[ob]["extract"]);
+      var wikiResponse = response.query.pages;
+      $("#wiki-content").text(obj[ob]["extract"])
+    });
 }
 
-function flickrAPIstub(topic="other") {
+function flickrAPIstub(topic = "other") {
   console.log("flicrAPI called with..." + " " + topic);
-  //retrieve data from Flickr API
-  var keysearch = topic.trim().toLowerCase();
-  var api_key = "40076406b171f50ca25bfbe121eb2806";
-  var queryURL = "https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=" + 
-                    api_key + "&gallery_id=187359801-72157713443419606&format=json&nojsoncallback=1";
-  var photoIds = {};
-  // let newsID = 0;
+  let api_url = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=" +
+    topic + '&safe_search=1)';;
+
+  $("#flickrDiv").empty();
 
   $.ajax({
-    url: queryURL,
-    method: "GET"
-  })
-  //
-    .then(function(response) {
-      let photos = response.photos.photo; // bushfire:41241063925-5, australia:5248354281-7, 
-      let others = [];
-      others.push(photos[0].id);
-      others.push(photos[6].id);
-      others.push(photos[8].id);
-      others.push(photos[9].id);
-      others.push(photos[10].id);
-      Object.assign(photoIds, {"others": others});
-      Object.assign(photoIds, {"megxit": photos[1].id});
-      Object.assign(photoIds, {"afl": photos[2].id});
-      Object.assign(photoIds, {"stock market": photos[3].id});
-      Object.assign(photoIds, {"corona virus": photos[4].id});
-      Object.assign(photoIds, {"bushfire": photos[5].id});
-      Object.assign(photoIds, {"australia": photos[7].id});
-      let hotTopic = Object.keys(photoIds);
-      if(hotTopic.indexOf(topic) === -1) {
-        var randomPhotoId = photoIds.others[Math.floor(Math.random() * photoIds.others.length)];
-        queryURL = "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=" +
-                    api_key + "&photo_id=" + randomPhotoId + "&format=json&nojsoncallback=1";
-        
-      }  else {
-        queryURL = "https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=" +
-                    api_key + "&photo_id=" + photoIds[topic] + "&format=json&nojsoncallback=1";
-        //console.log(photoIds[topic]);
-      }
-      $.ajax({
-        url: queryURL,
-        method: "GET"
-      })
-      //
-        .then(function(data) {
-          $("#flickrImg").attr("src", data.sizes.size[6].source);
-        });
-    });
+    url: api_url,
+    dataType: "jsonp", // jsonp
+    jsonpCallback: 'jsonFlickrFeed', // add this property
+    success: function (result, status, xhr) {
+      $.each(result.items, function (i, item) {
+        $("<img>").attr("src", item.media.m).appendTo("#flickrDiv");
+        if (i === 5) {
+          return false;
+        }
+      });
+    },
+    error: function (xhr, status, error) {
+      console.log(xhr)
+      $("#flickrDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+    }
+  });
+
 }
 
 function newsAPIstub(topic) {

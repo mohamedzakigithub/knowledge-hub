@@ -11,6 +11,27 @@ $("#searchBtn").on("click", function () {
 
 function wikiAPIstub(topic) {
   console.log("wikiAPI called with..." + " " + topic);
+    //var queryURL = "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&rvsection=0&titles=pizza&imlimit=20&origin=*&format=json&formatversion=2";
+    //var queryURL = "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="+topic+"&origin=*&format=json"
+    var queryURL= "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles="+topic;
+    // Performing an AJAX request with the queryURL
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    })
+      // After data comes back from the request
+      .then(function (response) {
+        console.log(queryURL);
+  
+       // console.log(response);
+        // storing the data from the AJAX request in the results variable
+        //var results = response.data;
+        var obj = response.query.pages;
+        var ob = Object.keys(obj)[0];
+        console.log(obj[ob]["extract"]);
+        var wikiResponse = response.query.pages;
+        $("#wiki-content").text(obj[ob]["extract"])
+      });
 }
 
 function flickrAPIstub(topic="other") {
@@ -76,7 +97,7 @@ function newsAPIstub(topic) {
   $.ajax({
     url: api_url + topic + "&language=en" + "&apikey=" + newsAPIkey
   }).then(function (result) {
-    console.log(result);
+    //console.log(result);
     newsArray = result;
     updateNews(result);
   });

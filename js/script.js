@@ -23,8 +23,8 @@ function newsAPIstub(topic) {
   });
 
   function updateNews(result) {
-    $(".newsTitle").text(result.articles[newsID].title);
     $(".newsImage").attr("src", result.articles[newsID].urlToImage);
+    $(".newsTitle").text(result.articles[newsID].title);
     $(".newsSource").text("source: " + result.articles[newsID].source.name);
     $(".newsDescription").text(result.articles[newsID].description);
     $(".newsURL").attr("href", result.articles[newsID].url);
@@ -62,19 +62,22 @@ function flickrAPIstub(topic) {
     for (i = 0; i <= 10; i++) {
       let img = $("<img>").attr("src", result.photos.photo[i].url_m);
       img.css("margin", "auto");
-      img.css("height", "300");
-      img.css("padding", "10px");
+      img.css("height", "200");
+      img.css("padding", "5px");
       $("#flickrDiv").append(img);
     }
-    $("#flickrDiv").slick({
-      arrows: false,
-      infinite: true,
-      speed: 5000,
-      slidesToShow: 1,
-      centerMode: true,
-      variableWidth: true,
-      autoplay: true,
-      autoplaySpeed: 500
+    let imagesLoaded = 0;
+    let totalImages = $("#flickrDiv img").length;
+    $("#flickrDiv img").on("load", function() {
+      imagesLoaded++;
+      if (imagesLoaded == totalImages) {
+        $("#flickrDiv").slick({
+          infinite: true,
+          speed: 1000,
+          centerMode: true,
+          variableWidth: true
+        });
+      }
     });
   });
 }
@@ -90,7 +93,6 @@ function wikiAPIstub(topic) {
   })
     // After data comes back from the request
     .then(function(response) {
-      console.log(response);
       let obj = response.query.pages;
       let ob = Object.keys(obj)[0];
       $("#wikipediaDiv").html(obj[ob]["extract"]);

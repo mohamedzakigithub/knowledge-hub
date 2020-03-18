@@ -40,6 +40,8 @@ function newsAPIstub(topic) {
       $(".newsImage").hide();
       $(".newsSource").hide();
       $(".newsDescription").hide();
+      $(".next").hide();
+      $(".prev").hide();
     } else {
       newsArray = result;
       updateNews(result);
@@ -62,6 +64,8 @@ function newsAPIstub(topic) {
     $(".newsURL")
       .attr("href", result.articles[newsID].url)
       .show();
+    $(".next").show();
+    $(".prev").show();
   }
 
   $(".next").on("click", function() {
@@ -92,8 +96,11 @@ function flickrAPIstub(topic) {
     url: api_url
   }).then(function(result) {
     if (result.photos.photo.length < 1) {
-      $("#flickrDiv").html("<h1>No photos found</h1>");
+      $("#flickrDiv")
+        .html("<h1>No photos found</h1>")
+        .css("background-color", "white");
     } else {
+      $("#flickrDiv").css("background-color", "transparent");
       $("#flickrDiv").slick("unslick");
       $("#flickrDiv").empty();
       for (i = 0; i <= 10; i++) {

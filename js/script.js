@@ -4,10 +4,26 @@ $("#searchBtn").on("click", function() {
     .val()
     .toLowerCase()
     .trim();
-  $(".column").attr("style", "display:block");
-  newsAPIstub(topic);
-  wikiAPIstub(topic);
-  flickrAPIstub(topic);
+  if (topic) {
+    $(".hero").animate(
+      {
+        top: 0
+      },
+      1000
+    );
+    $(".section").animate(
+      {
+        top: 10
+      },
+      1500,
+      function() {
+        $(".column").attr("style", "display:block");
+        newsAPIstub(topic);
+        wikiAPIstub(topic);
+        flickrAPIstub(topic);
+      }
+    );
+  }
 });
 
 function newsAPIstub(topic) {
@@ -18,16 +34,34 @@ function newsAPIstub(topic) {
   $.ajax({
     url: api_url + topic + "&language=en" + "&apikey=" + newsAPIkey
   }).then(function(result) {
-    newsArray = result;
-    updateNews(result);
+    if (result.totalResults < 1) {
+      $(".newsTitle").text("No articles found");
+      $(".newsURL").hide();
+      $(".newsImage").hide();
+      $(".newsSource").hide();
+      $(".newsDescription").hide();
+    } else {
+      newsArray = result;
+      updateNews(result);
+    }
   });
 
   function updateNews(result) {
-    $(".newsImage").attr("src", result.articles[newsID].urlToImage);
-    $(".newsTitle").text(result.articles[newsID].title);
-    $(".newsSource").text("source: " + result.articles[newsID].source.name);
-    $(".newsDescription").text(result.articles[newsID].description);
-    $(".newsURL").attr("href", result.articles[newsID].url);
+    $(".newsImage")
+      .attr("src", result.articles[newsID].urlToImage)
+      .show();
+    $(".newsTitle")
+      .text(result.articles[newsID].title)
+      .show();
+    $(".newsSource")
+      .text("source: " + result.articles[newsID].source.name)
+      .show();
+    $(".newsDescription")
+      .text(result.articles[newsID].description)
+      .show();
+    $(".newsURL")
+      .attr("href", result.articles[newsID].url)
+      .show();
   }
 
   $(".next").on("click", function() {
@@ -57,28 +91,32 @@ function flickrAPIstub(topic) {
   $.ajax({
     url: api_url
   }).then(function(result) {
-    $("#flickrDiv").slick("unslick");
-    $("#flickrDiv").empty();
-    for (i = 0; i <= 10; i++) {
-      let img = $("<img>").attr("src", result.photos.photo[i].url_m);
-      img.css("margin", "auto");
-      img.css("height", "200");
-      img.css("padding", "5px");
-      $("#flickrDiv").append(img);
-    }
-    let imagesLoaded = 0;
-    let totalImages = $("#flickrDiv img").length;
-    $("#flickrDiv img").on("load", function() {
-      imagesLoaded++;
-      if (imagesLoaded == totalImages) {
-        $("#flickrDiv").slick({
-          infinite: true,
-          speed: 1000,
-          centerMode: true,
-          variableWidth: true
-        });
+    if (result.photos.photo.length < 1) {
+      $("#flickrDiv").html("<h1>No photos found</h1>");
+    } else {
+      $("#flickrDiv").slick("unslick");
+      $("#flickrDiv").empty();
+      for (i = 0; i <= 10; i++) {
+        let img = $("<img>").attr("src", result.photos.photo[i].url_m);
+        img.css("margin", "auto");
+        img.css("height", "200");
+        img.css("padding", "5px");
+        $("#flickrDiv").append(img);
       }
-    });
+      let imagesLoaded = 0;
+      let totalImages = $("#flickrDiv img").length;
+      $("#flickrDiv img").on("load", function() {
+        imagesLoaded++;
+        if (imagesLoaded == totalImages) {
+          $("#flickrDiv").slick({
+            infinite: true,
+            speed: 1000,
+            centerMode: true,
+            variableWidth: true
+          });
+        }
+      });
+    }
   });
 }
 
@@ -86,19 +124,21 @@ function wikiAPIstub(topic) {
   let queryURL =
     "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=" +
     topic;
-  // Performing an AJAX request with the queryURL
+
   $.ajax({
     url: queryURL,
     method: "GET"
-  })
-    // After data comes back from the request
-    .then(function(response) {
-      let obj = response.query.pages;
+  }).then(function(result) {
+    if (Object.keys(result.query.pages)[0] < 0) {
+      $("#wikipediaDiv").text("No Wikipedia articles found");
+      $(".wikipediaURL").hide();
+    } else {
+      let obj = result.query.pages;
       let ob = Object.keys(obj)[0];
       $("#wikipediaDiv").html(obj[ob]["extract"]);
-      $(".wikipediaURL").attr(
-        "href",
-        "https://en.wikipedia.org/?curid=" + obj[ob]["pageid"]
-      );
-    });
+      $(".wikipediaURL")
+        .attr("href", "https://en.wikipedia.org/?curid=" + obj[ob]["pageid"])
+        .show();
+    }
+  });
 }

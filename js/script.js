@@ -1,5 +1,6 @@
 $("#flickrDiv").slick();
 $("#searchBtn").on("click", function() {
+  $("#flickrDiv").hide();
   let topic = $("#searchText")
     .val()
     .toLowerCase()
@@ -115,6 +116,7 @@ function flickrAPIstub(topic) {
       $("#flickrDiv img").on("load", function() {
         imagesLoaded++;
         if (imagesLoaded == totalImages) {
+          $("#flickrDiv").show();
           $("#flickrDiv").slick({
             infinite: true,
             speed: 1000,
@@ -128,13 +130,16 @@ function flickrAPIstub(topic) {
 }
 
 function titleCase(str) {
-  return $(str.split(/\s|_/)).map(function() {
+  return $(str.split(/\s|_/))
+    .map(function() {
       return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
-  }).get().join(" ");
+    })
+    .get()
+    .join(" ");
 }
 
 function wikiAPIstub(topic) {
-  if(topic.indexOf(' ') >= 0){
+  if (topic.indexOf(" ") >= 0) {
     topic = titleCase(topic);
   }
 
@@ -142,8 +147,8 @@ function wikiAPIstub(topic) {
   let queryURL =
     "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=" +
     topic;
-    // let queryURL =
-    // "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=New%20Zealand";
+  // let queryURL =
+  // "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=New%20Zealand";
   $.ajax({
     url: queryURL,
     method: "GET"

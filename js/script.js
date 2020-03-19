@@ -6,12 +6,14 @@ $("#searchBtn").on("click", function() {
     .toLowerCase()
     .trim();
   if (topic) {
-    $(".hero").animate({
+    $(".hero").animate(
+      {
         top: 0
       },
       1000
     );
-    $(".section").animate({
+    $(".section").animate(
+      {
         top: 10
       },
       1500,
@@ -89,10 +91,16 @@ function flickrAPIstub(topic) {
   }).then(function(result) {
     if (result.photos.photo.length < 1) {
       $("#flickrDiv")
-        .html("<h1>No photos found</h1>")
+        .parent()
+        .parent()
         .css("background-color", "white");
+      $("#flickrDiv").show();
+      $("#flickrDiv").html("<h1>No photos found</h1>");
     } else {
-      $("#flickrDiv").css("background-color", "transparent");
+      $("#flickrDiv")
+        .parent()
+        .parent()
+        .css("background-color", "transparent");
       $("#flickrDiv").slick("unslick");
       $("#flickrDiv").empty();
       for (i = 0; i < result.photos.photo.length; i++) {
@@ -104,7 +112,7 @@ function flickrAPIstub(topic) {
       }
       let imagesLoaded = 0;
       let totalImages = $("#flickrDiv img").length;
-      $("#flickrDiv img").on("load", function () {
+      $("#flickrDiv img").on("load", function() {
         imagesLoaded++;
         if (imagesLoaded == totalImages) {
           $("#flickrDiv").show();
@@ -121,7 +129,7 @@ function flickrAPIstub(topic) {
 }
 function titleCase(str) {
   return $(str.split(/\s|_/))
-    .map(function () {
+    .map(function() {
       return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
     })
     .get()
@@ -132,7 +140,6 @@ function wikiAPIstub(topic) {
   if (topic.indexOf(" ") >= 0) {
     topic = titleCase(topic);
   }
-  console.log("topic is ", topic);
   let queryURL =
     "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=" +
     topic;
@@ -141,8 +148,7 @@ function wikiAPIstub(topic) {
   $.ajax({
     url: queryURL,
     method: "GET"
-  }).then(function (result) {
-    console.log(result);
+  }).then(function(result) {
     if (Object.keys(result.query.pages)[0] < 0) {
       $("#wikipediaDiv").text("No Wikipedia articles found");
       $(".wikipediaURL").hide();
@@ -150,7 +156,6 @@ function wikiAPIstub(topic) {
       let obj = result.query.pages;
       let ob = Object.keys(obj)[0];
       $("#wikipediaDiv").html(obj[ob]["extract"]);
-      console.log("Wiki result is", result);
       $(".wikipediaURL")
         .attr("href", "https://en.wikipedia.org/?curid=" + obj[ob]["pageid"])
         .show();

@@ -103,10 +103,10 @@ function flickrAPIstub(topic) {
       $("#flickrDiv").css("background-color", "transparent");
       $("#flickrDiv").slick("unslick");
       $("#flickrDiv").empty();
-      for (i = 0; i <= 10; i++) {
+      for (i = 0; i < result.photos.photo.length; i++) {
         let img = $("<img>").attr("src", result.photos.photo[i].url_m);
         img.css("margin", "auto");
-        img.css("height", "200");
+        img.css("height", "400");
         img.css("padding", "5px");
         $("#flickrDiv").append(img);
       }
@@ -136,6 +136,7 @@ function wikiAPIstub(topic) {
     url: queryURL,
     method: "GET"
   }).then(function(result) {
+    console.log(result);
     if (Object.keys(result.query.pages)[0] < 0) {
       $("#wikipediaDiv").text("No Wikipedia articles found");
       $(".wikipediaURL").hide();

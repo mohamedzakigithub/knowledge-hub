@@ -21,18 +21,7 @@
 
   <body>
     <!-- START NAV -->
-    <nav class="navbar">
-      <div class="container">
-        <div class="navbar-brand">
-          <a class="navbar-item" href="index.html">
-            <h1>Knowledge Hub</h1>
-          </a>
-        </div>
-      </div>
-    </nav>
-
     
-
     <div class="container"></div>
       <div id="flow">
         <span class="flow-1"></span>
@@ -70,7 +59,13 @@
         <br>
 
         <div class="row columns">
-          <div id="newsDiv" class="column is-two-fifths" style="display: none;">
+          <div  class="column is-half" style="display: none;">
+            <button class="button is-link is-large is-fullwidth">
+              Flickr images
+            </button>
+            <br />
+            <div id="flickrDiv" style="width: 95%; margin: auto;" class="row"></div>
+            <br />
             <button class="button is-link is-large is-fullwidth">
               Wikipedia info
             </button>
@@ -95,14 +90,8 @@
             <br />
           </div>
 
-          <div class="column is-three-fifths" style="display: none;">
-            <button class="button is-link is-large is-fullwidth">
-              Flickr images
-            </button>
-            <br />
-            <div id="flickrDiv" style="width: 95%; margin: auto;" class="row"></div>
-
-            <br />
+          <div class="column is-half" style="display: none;">
+            
             <button class="button is-link is-large is-fullwidth">
               Latest News
             </button>

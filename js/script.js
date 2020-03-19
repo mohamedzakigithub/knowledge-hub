@@ -6,18 +6,16 @@ $("#searchBtn").on("click", function() {
     .toLowerCase()
     .trim();
   if (topic) {
-    $(".hero").animate(
-      {
+    $(".hero").animate({
         top: 0
       },
       1000
     );
-    $(".section").animate(
-      {
+    $(".section").animate({
         top: 10
       },
       1500,
-      function() {
+      function () {
         $(".column").attr("style", "display:block");
         newsAPIstub(topic);
         wikiAPIstub(topic);
@@ -25,16 +23,14 @@ $("#searchBtn").on("click", function() {
       }
     );
   }
-});
-
+});​
 function newsAPIstub(topic) {
   let api_url = "https://newsapi.org/v2/everything?qInTitle=";
   let newsAPIkey = "02403ceecf7b4629a113e349b90603ec";
-  let newsID = 0;
-
+  let newsID = 0;​
   $.ajax({
     url: api_url + topic + "&language=en" + "&apikey=" + newsAPIkey
-  }).then(function(result) {
+  }).then(function (result) {
     if (result.totalResults < 1) {
       $(".newsTitle").text("No articles found");
       $(".newsURL").hide();
@@ -47,8 +43,7 @@ function newsAPIstub(topic) {
       newsArray = result;
       updateNews(result);
     }
-  });
-
+  });​
   function updateNews(result) {
     $(".newsImage")
       .attr("src", result.articles[newsID].urlToImage)
@@ -67,23 +62,20 @@ function newsAPIstub(topic) {
       .show();
     $(".next").show();
     $(".prev").show();
-  }
-
-  $(".next").on("click", function() {
+  }​
+  $(".next").on("click", function () {
     if (newsID < 19) {
       newsID++;
       updateNews(newsArray);
     }
-  });
-
-  $(".prev").on("click", function() {
+  });​
+  $(".prev").on("click", function () {
     if (newsID > 1) {
       newsID--;
       updateNews(newsArray);
     }
   });
-}
-
+}​
 function flickrAPIstub(topic) {
   let api_key = "4b3ee8660253745b72043ab4adcfa0a2";
   let api_url =
@@ -91,11 +83,10 @@ function flickrAPIstub(topic) {
     api_key +
     "&tags=" +
     topic +
-    "&format=json&nojsoncallback=1&safe_search=1&is_getty=true&extras=url_m";
-
+    "&format=json&nojsoncallback=1&safe_search=1&is_getty=true&extras=url_m";​
   $.ajax({
     url: api_url
-  }).then(function(result) {
+  }).then(function (result) {
     if (result.photos.photo.length < 1) {
       $("#flickrDiv")
         .html("<h1>No photos found</h1>")
@@ -113,7 +104,7 @@ function flickrAPIstub(topic) {
       }
       let imagesLoaded = 0;
       let totalImages = $("#flickrDiv img").length;
-      $("#flickrDiv img").on("load", function() {
+      $("#flickrDiv img").on("load", function () {
         imagesLoaded++;
         if (imagesLoaded == totalImages) {
           $("#flickrDiv").show();
@@ -127,8 +118,7 @@ function flickrAPIstub(topic) {
       });
     }
   });
-}
-
+}​
 function titleCase(str) {
   return $(str.split(/\s|_/))
     .map(function() {
@@ -141,8 +131,7 @@ function titleCase(str) {
 function wikiAPIstub(topic) {
   if (topic.indexOf(" ") >= 0) {
     topic = titleCase(topic);
-  }
-
+  }​
   console.log("topic is ", topic);
   let queryURL =
     "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=" +
@@ -152,7 +141,7 @@ function wikiAPIstub(topic) {
   $.ajax({
     url: queryURL,
     method: "GET"
-  }).then(function(result) {
+  }).then(function (result) {
     console.log(result);
     if (Object.keys(result.query.pages)[0] < 0) {
       $("#wikipediaDiv").text("No Wikipedia articles found");

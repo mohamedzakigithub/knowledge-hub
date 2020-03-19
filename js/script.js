@@ -1,5 +1,5 @@
 $("#flickrDiv").slick();
-$("#searchBtn").on("click", function () {
+$("#searchBtn").on("click", function() {
   $("#flickrDiv").hide();
   let topic = $("#searchText")
     .val()
@@ -121,12 +121,13 @@ function flickrAPIstub(topic) {
 }​
 function titleCase(str) {
   return $(str.split(/\s|_/))
-    .map(function () {
+    .map(function() {
       return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
     })
     .get()
     .join(" ");
-}​
+}
+
 function wikiAPIstub(topic) {
   if (topic.indexOf(" ") >= 0) {
     topic = titleCase(topic);

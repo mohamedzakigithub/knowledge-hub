@@ -1,106 +1,152 @@
-///////////////////// News API app ////////////////////////////
-
-$("#searchBtn").on("click", function () {
-  let topic = $("#searchText").val();
-
-  $(".column").attr("style", "display:block");
-  newsAPIstub($("#searchText").val());
-  wikiAPIstub($("#searchText").val());
-  flickrAPIstub($("#searchText").val());
+$("#flickrDiv").slick();
+$("#searchBtn").on("click", function() {
+  let topic = $("#searchText")
+    .val()
+    .toLowerCase()
+    .trim();
+  if (topic) {
+    $(".hero").animate(
+      {
+        top: 0
+      },
+      1000
+    );
+    $(".section").animate(
+      {
+        top: 10
+      },
+      1500,
+      function() {
+        $(".column").attr("style", "display:block");
+        newsAPIstub(topic);
+        wikiAPIstub(topic);
+        flickrAPIstub(topic);
+      }
+    );
+  }
 });
 
-function wikiAPIstub(topic) {
-  console.log("wikiAPI called with..." + " " + topic);
-  //var queryURL = "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&rvsection=0&titles=pizza&imlimit=20&origin=*&format=json&formatversion=2";
-  //var queryURL = "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="+topic+"&origin=*&format=json"
-  var queryURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=" + topic;
-  // Performing an AJAX request with the queryURL
-  $.ajax({
-      url: queryURL,
-      method: "GET"
-    })
-    // After data comes back from the request
-    .then(function (response) {
-      console.log(queryURL);
-
-      // console.log(response);
-      // storing the data from the AJAX request in the results variable
-      //var results = response.data;
-      var obj = response.query.pages;
-      var ob = Object.keys(obj)[0];
-      console.log(obj[ob]["extract"]);
-      var wikiResponse = response.query.pages;
-      $("#wiki-content").text(obj[ob]["extract"])
-    });
-}
-
-function flickrAPIstub(topic = "other") {
-  console.log("flicrAPI called with..." + " " + topic);
-  let api_url = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=" +
-    topic + '&safe_search=1)';;
-
-  $("#flickrDiv").empty();
-
-  $.ajax({
-    url: api_url,
-    dataType: "jsonp", // jsonp
-    jsonpCallback: 'jsonFlickrFeed', // add this property
-    success: function (result, status, xhr) {
-      $.each(result.items, function (i, item) {
-        $("<img>").attr("src", item.media.m).appendTo("#flickrDiv");
-        if (i === 5) {
-          return false;
-        }
-      });
-    },
-    error: function (xhr, status, error) {
-      console.log(xhr)
-      $("#flickrDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
-    }
-  });
-
-}
-
 function newsAPIstub(topic) {
-  console.log("newsAPI called with..." + " " + topic);
-
   let api_url = "https://newsapi.org/v2/everything?qInTitle=";
   let newsAPIkey = "02403ceecf7b4629a113e349b90603ec";
-  let news = [];
   let newsID = 0;
 
   $.ajax({
     url: api_url + topic + "&language=en" + "&apikey=" + newsAPIkey
-  }).then(function (result) {
-    //console.log(result);
-    newsArray = result;
-    updateNews(result);
+  }).then(function(result) {
+    if (result.totalResults < 1) {
+      $(".newsTitle").text("No articles found");
+      $(".newsURL").hide();
+      $(".newsImage").hide();
+      $(".newsSource").hide();
+      $(".newsDescription").hide();
+      $(".next").hide();
+      $(".prev").hide();
+    } else {
+      newsArray = result;
+      updateNews(result);
+    }
   });
 
   function updateNews(result) {
-    $(".newsTitle").text(result.articles[newsID].title);
-    $(".newsImage").attr("src", result.articles[newsID].urlToImage);
-    $(".newsSource").text("source: " + result.articles[newsID].source.name);
-    $(".newsDescription").text(result.articles[newsID].description);
-    $(".newsURL").attr("href", result.articles[newsID].url);
+    $(".newsImage")
+      .attr("src", result.articles[newsID].urlToImage)
+      .show();
+    $(".newsTitle")
+      .text(result.articles[newsID].title)
+      .show();
+    $(".newsSource")
+      .text("source: " + result.articles[newsID].source.name)
+      .show();
+    $(".newsDescription")
+      .text(result.articles[newsID].description)
+      .show();
+    $(".newsURL")
+      .attr("href", result.articles[newsID].url)
+      .show();
+    $(".next").show();
+    $(".prev").show();
   }
 
-  $(".next").on("click", function () {
+  $(".next").on("click", function() {
     if (newsID < 19) {
-      console.log(newsID);
       newsID++;
       updateNews(newsArray);
     }
   });
 
-  $(".prev").on("click", function () {
+  $(".prev").on("click", function() {
     if (newsID > 1) {
       newsID--;
-      console.log(newsID);
       updateNews(newsArray);
     }
   });
 }
 
+function flickrAPIstub(topic) {
+  let api_key = "4b3ee8660253745b72043ab4adcfa0a2";
+  let api_url =
+    "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=" +
+    api_key +
+    "&tags=" +
+    topic +
+    "&format=json&nojsoncallback=1&safe_search=1&is_getty=true&extras=url_m";
 
-//////////////////////////////////
+  $.ajax({
+    url: api_url
+  }).then(function(result) {
+    if (result.photos.photo.length < 1) {
+      $("#flickrDiv")
+        .html("<h1>No photos found</h1>")
+        .css("background-color", "white");
+    } else {
+      $("#flickrDiv").css("background-color", "transparent");
+      $("#flickrDiv").slick("unslick");
+      $("#flickrDiv").empty();
+      for (i = 0; i < result.photos.photo.length; i++) {
+        let img = $("<img>").attr("src", result.photos.photo[i].url_m);
+        img.css("margin", "auto");
+        img.css("height", "400");
+        img.css("padding", "5px");
+        $("#flickrDiv").append(img);
+      }
+      let imagesLoaded = 0;
+      let totalImages = $("#flickrDiv img").length;
+      $("#flickrDiv img").on("load", function() {
+        imagesLoaded++;
+        if (imagesLoaded == totalImages) {
+          $("#flickrDiv").slick({
+            infinite: true,
+            speed: 1000,
+            centerMode: true,
+            variableWidth: true
+          });
+        }
+      });
+    }
+  });
+}
+
+function wikiAPIstub(topic) {
+  let queryURL =
+    "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=" +
+    topic;
+
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function(result) {
+    console.log(result);
+    if (Object.keys(result.query.pages)[0] < 0) {
+      $("#wikipediaDiv").text("No Wikipedia articles found");
+      $(".wikipediaURL").hide();
+    } else {
+      let obj = result.query.pages;
+      let ob = Object.keys(obj)[0];
+      $("#wikipediaDiv").html(obj[ob]["extract"]);
+      $(".wikipediaURL")
+        .attr("href", "https://en.wikipedia.org/?curid=" + obj[ob]["pageid"])
+        .show();
+    }
+  });
+}

@@ -1,8 +1,7 @@
 body {
   background: #041221;
-  height: 200vh;
+  min-height: 100vh;
 }
-/* Card start*/
 .card {
   overflow: hidden;
 }
@@ -12,7 +11,7 @@ body {
   backface-visibility: initial;
   border-radius: 5px;
 }
-/* Card end */
+
 .media-content {
   overflow: hidden;
 }

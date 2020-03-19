@@ -127,11 +127,23 @@ function flickrAPIstub(topic) {
   });
 }
 
+function titleCase(str) {
+  return $(str.split(/\s|_/)).map(function() {
+      return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+  }).get().join(" ");
+}
+
 function wikiAPIstub(topic) {
+  if(topic.indexOf(' ') >= 0){
+    topic = titleCase(topic);
+  }
+
+  console.log("topic is ", topic);
   let queryURL =
     "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=" +
     topic;
-
+    // let queryURL =
+    // "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=New%20Zealand";
   $.ajax({
     url: queryURL,
     method: "GET"
@@ -144,6 +156,7 @@ function wikiAPIstub(topic) {
       let obj = result.query.pages;
       let ob = Object.keys(obj)[0];
       $("#wikipediaDiv").html(obj[ob]["extract"]);
+      console.log("Wiki result is", result);
       $(".wikipediaURL")
         .attr("href", "https://en.wikipedia.org/?curid=" + obj[ob]["pageid"])
         .show();

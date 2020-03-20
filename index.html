@@ -1,134 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Knowledge hub</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css"
-    />
-    <link
-      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      rel="stylesheet"
-      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-      crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
     <link rel="stylesheet" type="text/css" href="slick/slick.css" />
     <link rel="stylesheet" type="text/css" href="slick/slick-theme.css" />
     <link rel="stylesheet" href="css/styles.css" />
   </head>
 
   <body>
-    <!-- START NAV -->
-    
+
     <div class="container"></div>
-      <div id="flow">
-        <span class="flow-1"></span>
-        <span class="flow-2"></span>
-        <span class="flow-3"></span>
+    <div id="flow">
+      <span class="flow-1"></span>
+      <span class="flow-2"></span>
+      <span class="flow-3"></span>
+    </div>
+    <section class="hero" style="position: relative; top: 180px; padding-top: 0px; padding-bottom: 5px;">
+      <div class="hero-body" style="padding-top: 0px; padding-bottom: 0px;">
+        <div class="container ">
+          <h1 class="title has-text-white">
+            Welcome to knowledge hub
+          </h1>
+          <h2 class="subtitle has-text-white">
+            Search for Wikipedia articles, latest news and images.
+          </h2>
+        </div>
       </div>
-      <section class="hero" style="position: relative; top: 180px; padding-top: 0px; padding-bottom: 5px;">
-        <div class="hero-body" style="padding-top: 0px; padding-bottom: 0px;">
-          <div class="container ">
-            <h1 class="title has-text-white">
-              Welcome to knowledge hub
-            </h1>
-            <h2 class="subtitle has-text-white">
-              Search for Wikipedia articles, latest news and images.
-            </h2>
+    </section>
+    <div class="section" style="position: relative; top: 200px;padding-top: 0px;">
+      <div class="box" style="margin: 0px;">
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input id="searchText" class="input has-text-centered" type="search"
+              placeholder="» » » » » » Search for anything « « « « « «"/>
+              
+          </div>
+          <div class="control">
+            <a id="searchBtn" class=" button is-info">Search</a>
           </div>
         </div>
-      </section>
-      <div class="section" style="position: relative; top: 200px;padding-top: 0px;">
-        <div class="box" style="margin: 0px;">
-          <div class="field has-addons">
-            <div class="control is-expanded">
-              <input
-                id="searchText"
-                class="input has-text-centered"
-                type="search"
-                placeholder="» » » » » » Search for anything « « « « « «"
-              />
-            </div>
-            <div class="control">
-              <a id="searchBtn" class=" button is-info">Search</a>
+      </div>
+      <br>
+
+      <div class="row columns">
+        <div class="column is-half" style="display: none;">
+          <button class="button is-link is-large is-fullwidth">
+            Flickr images
+          </button>
+          <br>
+          <div class="card large">
+            <div class="card-content" style="padding: 0px;">
+              <div id="flickrDiv" style="width: 85%; margin: auto;"></div>
             </div>
           </div>
-        </div>
-        <br>
 
-        <div class="row columns">
-          <div  class="column is-half" style="display: none;">
-            <button class="button is-link is-large is-fullwidth">
-              Flickr images
-            </button>
-            <br />
-            <div id="flickrDiv" style="width: 95%; margin: auto;" class="row"></div>
-            <br />
-            <button class="button is-link is-large is-fullwidth">
-              Wikipedia info
-            </button>
-            <br />
-            <div class="card large">
-              <div class="card-content">
-                <div
-                  id="wikipediaDiv"
-                  style="max-height: 1000px; overflow: hidden;
-                text-overflow: ellipsis;"
-                ></div>
-                <footer class="card-footer">
-                  <a
-                    target="_blank"
-                    href=""
-                    class="wikipediaURL card-footer-item"
-                    >Read full Wikipedia article</a
-                  >
-                </footer>
-              </div>
-            </div>
-            <br />
-          </div>
-
-          <div class="column is-half" style="display: none;">
-            
-            <button class="button is-link is-large is-fullwidth">
-              Latest News
-            </button>
-            <br />
-
-            <div class="card large">
-              <div class="card-image">
-                <figure class="image">
-                  <img class="newsImage" src="" />
-                </figure>
-              </div>
-              <div class="card-content">
-                <p class="newsTitle title is-6"></p>
-                <p class="subtitle is-6">
-                  <i class="newsSource"></i>
-                </p>
-                <p class="newsDescription content"></p>
-                <a target="_blank" href="" class="newsURL card-footer-item"
-                  >Read full article</a
-                >
-              </div>
+          <br />
+          <button class="button is-link is-large is-fullwidth">
+            Wikipedia info
+          </button>
+          <br />
+          <div class="card large">
+            <div class="card-content">
+              <div id="wikipediaDiv" style="max-height: 400px; overflow: hidden;
+                text-overflow: ellipsis;"></div>
               <footer class="card-footer">
-                <a class="prev card-footer-item">Previous article</a>
-                <a class="next card-footer-item">Next article</a>
+                <a target="_blank" href="" class="wikipediaURL card-footer-item">Read full Wikipedia article</a>
               </footer>
+            </div>
+          </div>
+          <br />
+        </div>
+
+        <div class="column is-half" style="display: none;">
+
+          <button class="button is-link is-large is-fullwidth">
+            Latest News
+          </button>
+          <br />
+          
+            <div class="card">
+              <footer class="card-footer">
+                <div class="card-footer-item is-pulled-left"><a class="prev">Previous article</a></div>
+                <div class="card-footer-item"><a class="currentArticle"></a></div>
+                <div class="card-footer-item is-pulled-right"><a class="next">Next article</a></div>
+              </footer>
+            </div>
+          <div class="card large">
+            <div class="card-image">
+              <figure class="image">
+                <img class="newsImage" src="" />
+              </figure>
+            </div>
+            <div class="card-content">
+              <p class="newsTitle title is-6"></p>
+              <p class="subtitle is-6">
+                <i class="newsSource"></i>
+              </p>
+              <p class="newsDescription content"></p>
+              <a target="_blank" href="" class="newsURL card-footer-item">Read full article</a>
             </div>
           </div>
         </div>
       </div>
     </div>
+    </div>
 
-    <script
-      src="https://code.jquery.com/jquery-3.4.1.min.js"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="slick/slick.min.js"></script>
     <script src="js/script.js"></script>
   </body>
+
 </html>

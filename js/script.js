@@ -1,10 +1,14 @@
-$("#flickrDiv").slick();
+$("#flickrDiv").slick(); // Initialize slick carousel.
+
+// Add click event listener for the search button and declare the handler function.
 $("#searchBtn").on("click", function() {
   $("#flickrDiv").hide();
   let topic = $("#searchText")
     .val()
     .toLowerCase()
     .trim();
+
+  // Hero and search box/button animation
   if (topic) {
     $(".hero").animate(
       {
@@ -17,6 +21,7 @@ $("#searchBtn").on("click", function() {
         top: 10
       },
       1500,
+      // Call all APIs with the topic after animation finishes.
       function() {
         $(".column").attr("style", "display:block");
         newsAPIstub(topic);
@@ -26,14 +31,23 @@ $("#searchBtn").on("click", function() {
     );
   }
 });
+
+// News API
 function newsAPIstub(topic) {
   let api_url = "https://newsapi.org/v2/everything?qInTitle=";
   let newsAPIkey = "02403ceecf7b4629a113e349b90603ec";
   let newsID = 0;
+  let totalResults = 0;
+  let newsArray = [];
+
+  // Ajax call
   $.ajax({
-    url: api_url + topic + "&language=en" + "&apikey=" + newsAPIkey
+    url: api_url + topic + "&language=en" + "&apikey=" + newsAPIkey // Format URL
   }).then(function(result) {
-    if (result.totalResults < 1) {
+    totalResults = result.articles.length;
+
+    // Check for returned articles number
+    if (totalResults < 1) {
       $(".newsTitle").text("No articles found");
       $(".newsURL").hide();
       $(".newsImage").hide();
@@ -42,42 +56,66 @@ function newsAPIstub(topic) {
       $(".next").hide();
       $(".prev").hide();
     } else {
-      newsArray = result;
-      updateNews(result);
+      newsArray = result.articles;
+      updateNews(newsArray); // Call updateNews function.
     }
   });
-  function updateNews(result) {
+
+  // UpdateNews function extract news title, images, source and description and set them to the assigned elements.
+  function updateNews(newsArray) {
+    $(".currentArticle").text(newsID + 1 + " of " + totalResults);
+
+    // Manage Next and Previous buttons display and hide
+    switch (true) {
+      case newsID < 1: {
+        $(".next").show();
+        $(".prev").hide();
+        break;
+      }
+      case newsID >= 1 && newsID < totalResults - 1: {
+        $(".prev").show();
+        $(".next").show();
+        break;
+      }
+      case newsID >= totalResults - 1: {
+        $(".next").hide();
+        $(".prev").show();
+        break;
+      }
+    }
     $(".newsImage")
-      .attr("src", result.articles[newsID].urlToImage)
+      .attr("src", newsArray[newsID].urlToImage)
       .show();
     $(".newsTitle")
-      .text(result.articles[newsID].title)
+      .text(newsArray[newsID].title)
       .show();
     $(".newsSource")
-      .text("source: " + result.articles[newsID].source.name)
+      .text("source: " + newsArray[newsID].source.name)
       .show();
     $(".newsDescription")
-      .text(result.articles[newsID].description)
+      .text(newsArray[newsID].description)
       .show();
     $(".newsURL")
-      .attr("href", result.articles[newsID].url)
+      .attr("href", newsArray[newsID].url)
       .show();
-    $(".next").show();
-    $(".prev").show();
   }
+
+  // Add event listeners for next and previous buttons
   $(".next").on("click", function() {
-    if (newsID < 19) {
+    if (newsID < totalResults - 1) {
       newsID++;
       updateNews(newsArray);
     }
   });
   $(".prev").on("click", function() {
-    if (newsID > 1) {
+    if (newsID > 0) {
       newsID--;
       updateNews(newsArray);
     }
   });
 }
+
+// flickr API
 function flickrAPIstub(topic) {
   let api_key = "4b3ee8660253745b72043ab4adcfa0a2";
   let api_url =
@@ -85,10 +123,13 @@ function flickrAPIstub(topic) {
     api_key +
     "&tags=" +
     topic +
-    "&format=json&nojsoncallback=1&safe_search=1&is_getty=true&extras=url_m";
+    "&format=json&nojsoncallback=1&safe_search=1&is_getty=true&extras=url_m"; //Format URL
+
+  // Ajax call.
   $.ajax({
     url: api_url
   }).then(function(result) {
+    // Check for returned results
     if (result.photos.photo.length < 1) {
       $("#flickrDiv")
         .parent()
@@ -110,6 +151,8 @@ function flickrAPIstub(topic) {
         img.css("padding", "5px");
         $("#flickrDiv").append(img);
       }
+
+      // Wait for all the images to load before initializing the carousel
       let imagesLoaded = 0;
       let totalImages = $("#flickrDiv img").length;
       $("#flickrDiv img").on("load", function() {
@@ -117,6 +160,7 @@ function flickrAPIstub(topic) {
         if (imagesLoaded == totalImages) {
           $("#flickrDiv").show();
           $("#flickrDiv").slick({
+            // Initialize slick carousel
             infinite: true,
             speed: 1000,
             centerMode: true,
@@ -127,24 +171,26 @@ function flickrAPIstub(topic) {
     }
   });
 }
-function titleCase(str) {
-  return $(str.split(/\s|_/))
-    .map(function() {
-      return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
-    })
-    .get()
-    .join(" ");
-}
 
+// Wikipedia API
 function wikiAPIstub(topic) {
+  // Function to change search text to title case for use by wikipedia API.
+  function titleCase(str) {
+    return $(str.split(/\s|_/))
+      .map(function() {
+        return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+      })
+      .get()
+      .join(" ");
+  }
   if (topic.indexOf(" ") >= 0) {
     topic = titleCase(topic);
   }
   let queryURL =
     "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=" +
-    topic;
-  // let queryURL =
-  // "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&origin=*&titles=New%20Zealand";
+    topic; // Format URL
+
+  // Ajax call.
   $.ajax({
     url: queryURL,
     method: "GET"

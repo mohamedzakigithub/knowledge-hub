@@ -14,7 +14,6 @@
   </head>
 
   <body>
-    <!-- START NAV -->
 
     <div class="container"></div>
     <div id="flow">
@@ -39,7 +38,8 @@
         <div class="field has-addons">
           <div class="control is-expanded">
             <input id="searchText" class="input has-text-centered" type="search"
-              placeholder="» » » » » » Search for anything « « « « « «" />
+              placeholder="» » » » » » Search for anything « « « « « «"/>
+              
           </div>
           <div class="control">
             <a id="searchBtn" class=" button is-info">Search</a>
@@ -53,9 +53,10 @@
           <button class="button is-link is-large is-fullwidth">
             Flickr images
           </button>
+          <br>
           <div class="card large">
-            <div class="card-content">
-              <div id="flickrDiv" style="width: 95%; margin: auto;"></div>
+            <div class="card-content" style="padding: 0px;">
+              <div id="flickrDiv" style="width: 85%; margin: auto;"></div>
             </div>
           </div>
 
@@ -66,7 +67,7 @@
           <br />
           <div class="card large">
             <div class="card-content">
-              <div id="wikipediaDiv" style="max-height: 1000px; overflow: hidden;
+              <div id="wikipediaDiv" style="max-height: 400px; overflow: hidden;
                 text-overflow: ellipsis;"></div>
               <footer class="card-footer">
                 <a target="_blank" href="" class="wikipediaURL card-footer-item">Read full Wikipedia article</a>
@@ -82,7 +83,14 @@
             Latest News
           </button>
           <br />
-
+          
+            <div class="card">
+              <footer class="card-footer">
+                <div class="card-footer-item is-pulled-left"><a class="prev">Previous article</a></div>
+                <div class="card-footer-item"><a class="currentArticle"></a></div>
+                <div class="card-footer-item is-pulled-right"><a class="next">Next article</a></div>
+              </footer>
+            </div>
           <div class="card large">
             <div class="card-image">
               <figure class="image">
@@ -97,10 +105,6 @@
               <p class="newsDescription content"></p>
               <a target="_blank" href="" class="newsURL card-footer-item">Read full article</a>
             </div>
-            <footer class="card-footer">
-              <a class="prev card-footer-item">Previous article</a>
-              <a class="next card-footer-item">Next article</a>
-            </footer>
           </div>
         </div>
       </div>

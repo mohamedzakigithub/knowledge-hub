@@ -2,6 +2,7 @@ $("#flickrDiv").slick(); // Initialize slick carousel.
 
 // Add click event listener for the search button and declare the handler function.
 $("#searchBtn").on("click", function() {
+  $(".column").hide();
   $("#flickrDiv").hide();
   let topic = $("#searchText")
     .val()

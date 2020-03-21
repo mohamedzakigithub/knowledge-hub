@@ -1,7 +1,22 @@
+html {
+  background-color: #041221 !important;
+}
+
+@media screen and (min-width: 1408px) {
+  .container {
+    max-width: 2344px;
+  }
+}
+
 body {
   background: #041221;
   min-height: 100vh;
 }
+
+.search-heading {
+  padding-top: 20px;
+}
+
 .card {
   overflow: hidden;
 }

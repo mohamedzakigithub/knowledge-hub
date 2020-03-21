@@ -20,6 +20,10 @@ body {
 .card {
   overflow: hidden;
 }
+
+#wikipediaDiv {
+  overflow: scroll!important;
+}
 .card.large {
   height: auto;
   -webkit-backface-visibility: hidden;

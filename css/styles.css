@@ -22,7 +22,7 @@ body {
 }
 
 #wikipediaDiv {
-  overflow: scroll!important;
+  overflow-y: scroll!important;
 }
 .card.large {
   height: auto;

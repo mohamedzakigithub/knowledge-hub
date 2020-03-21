@@ -6,7 +6,7 @@ Search for any topic of interest, this site will use API's to search for various
 - Wikipedia Entry
 - Current news & events
 
-**_ IMAGE GOES HERE _**
+![Knowledge hub (2)](https://user-images.githubusercontent.com/59762660/77215812-4bc30980-6b6a-11ea-9892-593753a5f1e8.gif)
 
 ## Table of Contents
 
@@ -17,8 +17,6 @@ Search for any topic of interest, this site will use API's to search for various
 ## Instructions
 
 Simply enter a topic name in the search box, the Knowledge Hub will do the rest!
-
-**_ MultiFrame GIF goes here _**
 
 ## Technology
 

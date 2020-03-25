@@ -8,7 +8,7 @@ Search for any topic of interest, this site will use API's to search for various
 
 # Find the App here!
 
-https://mandywl.github.io/project1-knowledge-hub/
+https://mohamedzakigithub.github.io/knowledge-hub/
 
 ![Knowledge hub (4)](https://user-images.githubusercontent.com/59762660/77216335-add13e00-6b6d-11ea-9bc6-9dfae262122c.gif)
 
